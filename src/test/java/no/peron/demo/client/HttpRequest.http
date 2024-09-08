@@ -1,0 +1,85 @@
+### Create a new user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "email": "user1@example.com"
+}
+
+### List all users
+GET http://localhost:8080/users
+
+### Create another user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "user2",
+  "email": "user2@example.com"
+}
+
+### List all users
+GET http://localhost:8080/users
+
+### User 1 creates a poll
+POST http://localhost:8080/polls
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "question": "What is your favorite programming language?",
+  "validUntil": "2024-12-31T23:59:59Z",
+  "publishedAt": "2024-09-08T12:00:00Z",
+  "voteOptions": [
+    {
+      "caption": "Java",
+      "presentationOrder": 1
+    },
+    {
+      "caption": "Python",
+      "presentationOrder": 2
+    },
+    {
+      "caption": "JavaScript",
+      "presentationOrder": 3
+    }
+  ]
+}
+
+### List polls
+GET http://localhost:8080/polls
+
+### User2 votes on the poll
+POST http://localhost:8080/votes
+Content-Type: application/json
+
+{
+  "pollId": "1",
+  "username": "user2",
+  "voteOption": {"caption":  "Python"}
+}
+
+### User 2 changes his vote
+PUT http://localhost:8080/votes/1
+Content-Type: application/json
+
+{
+  "pollId": "1",
+  "username": "user2",
+  "voteOption": {"caption":  "Java"}
+}
+
+### List votes
+GET http://localhost:8080/votes
+
+### Delete the one poll
+DELETE http://localhost:8080/polls/1
+
+### List votes
+GET http://localhost:8080/votes
+
+
+
+
+

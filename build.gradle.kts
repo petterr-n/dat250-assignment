@@ -18,8 +18,19 @@ repositories {
 }
 
 dependencies {
+	// Spring Data JPA
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+	// Spring Web
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	// H2 (embedded database)
+	runtimeOnly("com.h2database:h2")
+
+	// Spring Boot Test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	// JUnit platform launcher for tests
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
