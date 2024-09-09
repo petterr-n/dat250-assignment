@@ -11,5 +11,12 @@ The tests created for test automation is provided in an HTTP file contained in t
 Most of the testing while creating the API was performed using POSTMAN, which is an application for easily sending http requests to a server either hosted locally or on the internet.
 
 I have stumbled upon some issues while implementing the API. The most annoying one has to do with automatically generating IDs for Users, Polls, Votes and Vote-Options.
-At the moment the IDs are not correctly generated and I am getting null values whenever an object is created. This has made it harder to test some of the API implementations, especially when chained together. 
+At the moment the IDs are not correctly generated and I am getting null values whenever an object is created. This has made it harder to test some of the API implementations, especially multiple tests chained together. 
 As a result the automating of a test scenario has not been implemented yet, and has been put on a bit of a hold while I try to get the unique IDs to work. 
+There are some issues with the nested objects, like the VoteOptions made for each poll, not being generated or passed along with the poll correctly, could be a issue with how the Json is parsed, or how the Json POST bodies are set up.
+
+To summarize the assignment; The REST API for the Voting/Poll application has been created following a domain model showing the relationships between the models, and following a test driven approach.
+There are some issues with the current implementation, leading to the test automation task not being completed, and some of the api not working as expected.
+
+I will try to finish the implementation on time, but if I don't I will create a new branch with the finished iteration.
+
