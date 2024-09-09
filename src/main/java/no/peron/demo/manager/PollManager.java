@@ -10,12 +10,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class PollManager {
 
     private final Map<Long, User> users = new HashMap<>();
     private final Map<Long, Poll> polls = new HashMap<>();
+
+    // AtomicLongs for generating unique IDs
+    private final AtomicLong userIdCounter = new AtomicLong(0);
+    private final AtomicLong pollIdCounter = new AtomicLong(0);
 
     public Collection<Poll> getPolls() {
         return polls.values();
@@ -30,6 +35,9 @@ public class PollManager {
     }
 
     public void saveUser(User user) {
+        if (user.getId() == null) {
+            user.setId(userIdCounter.incrementAndGet()); // Generate a new unique ID
+        }
         users.put(user.getId(), user);
     }
 
@@ -38,6 +46,9 @@ public class PollManager {
     }
 
     public void savePoll(Poll poll) {
+        if (poll.getId() == null) {
+            poll.setId(pollIdCounter.incrementAndGet()); // Generate a new unique ID
+        }
         polls.put(poll.getId(), poll);
     }
 
@@ -57,14 +68,14 @@ public class PollManager {
         return polls.containsKey(id);
     }
 
-    public VoteOption findVoteOptionById (Poll poll, Long optionId) {
+    public VoteOption findVoteOptionById(Poll poll, Long optionId) {
         return poll.getOptions().stream()
                 .filter(option -> option.getId().equals(optionId))
                 .findFirst()
                 .orElse(null);
     }
 
-    public Vote findVoteById (User user, Long voteId) {
+    public Vote findVoteById(User user, Long voteId) {
         return user.getVotes().stream()
                 .filter(vote -> vote.getId().equals(voteId))
                 .findFirst()

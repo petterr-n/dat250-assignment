@@ -3,6 +3,7 @@ package no.peron.demo.controller;
 import no.peron.demo.manager.PollManager;
 import no.peron.demo.model.Poll;
 import no.peron.demo.model.User;
+import no.peron.demo.model.VoteOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,11 @@ public class PollController {
 
     @PostMapping
     public ResponseEntity<Poll> createPoll(@RequestBody Poll poll) {
+        if (poll.getOptions().isEmpty()) return ResponseEntity.badRequest().build();
+        for (VoteOption option : poll.getOptions()) {
+            option.setPoll(poll);
+        }
+
         pollManager.savePoll(poll);
         return ResponseEntity.ok(poll);
     }
