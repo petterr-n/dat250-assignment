@@ -2,6 +2,7 @@
 POST http://localhost:8080/users
 Content-Type: application/json
 
+// userId is generated, poll and vote lists are empty.
 {
   "username": "user1",
   "email": "user1@example.com"
@@ -26,12 +27,18 @@ GET http://localhost:8080/users
 POST http://localhost:8080/polls
 Content-Type: application/json
 
+// pollId is generated
 {
-  "userId": 1,
+  "creator":
+  {
+    "userId": 1,
+    "username": "user1",
+    "email": "user1@gmail.com"
+  },
   "question": "What is your favorite programming language?",
   "validUntil": "2024-12-31T23:59:59Z",
   "publishedAt": "2024-09-08T12:00:00Z",
-  "voteOptions": [
+  "options": [
     {
       "caption": "Java",
       "presentationOrder": 1
@@ -39,10 +46,6 @@ Content-Type: application/json
     {
       "caption": "Python",
       "presentationOrder": 2
-    },
-    {
-      "caption": "JavaScript",
-      "presentationOrder": 3
     }
   ]
 }
@@ -51,33 +54,49 @@ Content-Type: application/json
 GET http://localhost:8080/polls
 
 ### User2 votes on the poll
-POST http://localhost:8080/votes
+POST http://localhost:8080/users/2/votes
 Content-Type: application/json
 
+// voteId is generated
 {
-  "pollId": "1",
-  "username": "user2",
-  "voteOption": {"caption":  "Python"}
+  "voter": {
+    "userId": 2,
+    "username": "user2",
+    "email": "user2@gmail.com"
+  },
+  "option": {
+    "optionId": 1,
+    "caption": "Java",
+    "presentationOrder": 1
+  }
 }
 
 ### User 2 changes his vote
-PUT http://localhost:8080/votes/1
+PUT http://localhost:8080/users/2/votes/1
 Content-Type: application/json
 
 {
-  "pollId": "1",
-  "username": "user2",
-  "voteOption": {"caption":  "Java"}
+  "voteId": 1,
+  "voter": {
+    "userId": 2,
+    "username": "user2",
+    "email": "user2@gmail.com"
+  },
+  "option": {
+    "optionId": 2,
+    "caption": "Python",
+    "presentationOrder": 2
+  }
 }
 
-### List votes
-GET http://localhost:8080/votes
+### List user 2 votes
+GET http://localhost:8080/users/2/votes
 
-### Delete the one poll
+### Delete user 2
 DELETE http://localhost:8080/polls/1
 
-### List votes
-GET http://localhost:8080/votes
+### List user 2 votes
+GET http://localhost:8080/users/2/votes
 
 
 

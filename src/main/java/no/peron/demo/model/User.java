@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     private String username;
     private String email;
@@ -24,19 +24,19 @@ public class User {
     @JsonIgnore
     private List<Poll> createdPolls = new ArrayList<>();
 
-    @OneToMany(mappedBy = "voter")
+    @OneToMany(mappedBy = "voter", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Vote> votes = new ArrayList<>();
 
     public User() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long id) {
+        this.userId = id;
     }
 
     public String getUsername() {
