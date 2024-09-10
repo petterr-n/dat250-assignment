@@ -9,7 +9,7 @@ public class Vote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long voteId;
 
     private Instant publishedAt;
 
@@ -24,12 +24,12 @@ public class Vote {
     public Vote() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getVoteId() {
+        return voteId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setVoteId(Long id) {
+        this.voteId = id;
     }
 
     public Instant getPublishedAt() {

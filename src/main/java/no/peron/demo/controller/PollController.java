@@ -33,9 +33,13 @@ public class PollController {
     @PostMapping
     public ResponseEntity<Poll> createPoll(@RequestBody Poll poll) {
         if (poll.getOptions().isEmpty()) return ResponseEntity.badRequest().build();
+
         for (VoteOption option : poll.getOptions()) {
             option.setPoll(poll);
         }
+
+        User creator = poll.getCreator();
+        creator.getCreatedPolls().add(poll);
 
         pollManager.savePoll(poll);
         return ResponseEntity.ok(poll);

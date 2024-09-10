@@ -14,7 +14,7 @@ public class Poll {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long pollId;
 
     private String question;
     private Instant publishedAt;
@@ -31,12 +31,12 @@ public class Poll {
     public Poll() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getPollId() {
+        return pollId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPollId(Long id) {
+        this.pollId = id;
     }
 
     public String getQuestion() {

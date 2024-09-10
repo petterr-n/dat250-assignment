@@ -8,7 +8,7 @@ public class VoteOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long optionId;
 
     private String caption;
     private int presentationOrder;
@@ -21,12 +21,12 @@ public class VoteOption {
     public VoteOption() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getOptionId() {
+        return optionId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOptionId(Long id) {
+        this.optionId = id;
     }
 
     public String getCaption() {

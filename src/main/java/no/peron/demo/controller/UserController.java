@@ -2,11 +2,13 @@ package no.peron.demo.controller;
 
 import no.peron.demo.manager.PollManager;
 import no.peron.demo.model.User;
+import no.peron.demo.model.Vote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -48,8 +50,10 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (!pollManager.userExist(id)) return ResponseEntity.notFound().build();
-
+        Optional<User> userOptional = pollManager.getUser(id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         pollManager.deleteUser(id);
         return ResponseEntity.ok().build();
     }

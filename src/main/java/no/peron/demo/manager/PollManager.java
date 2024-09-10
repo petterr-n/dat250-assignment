@@ -21,6 +21,8 @@ public class PollManager {
     // AtomicLongs for generating unique IDs
     private final AtomicLong userIdCounter = new AtomicLong(0);
     private final AtomicLong pollIdCounter = new AtomicLong(0);
+    private final AtomicLong voteOptionIdCounter = new AtomicLong(0);
+    private final AtomicLong voteIdCounter = new AtomicLong(0);
 
     public Collection<Poll> getPolls() {
         return polls.values();
@@ -35,10 +37,14 @@ public class PollManager {
     }
 
     public void saveUser(User user) {
-        if (user.getId() == null) {
-            user.setId(userIdCounter.incrementAndGet()); // Generate a new unique ID
+        if (user.getUserId() == null) {
+            user.setUserId(userIdCounter.incrementAndGet()); // Generate a new unique ID
         }
-        users.put(user.getId(), user);
+        users.put(user.getUserId(), user);
+    }
+
+    public Long getNextVoteId() {
+        return voteIdCounter.incrementAndGet();
     }
 
     public Optional<Poll> getPoll(Long id) {
@@ -46,13 +52,22 @@ public class PollManager {
     }
 
     public void savePoll(Poll poll) {
-        if (poll.getId() == null) {
-            poll.setId(pollIdCounter.incrementAndGet()); // Generate a new unique ID
+        if (poll.getPollId() == null) {
+            poll.setPollId(pollIdCounter.incrementAndGet()); // Generate a new unique Poll ID
         }
-        polls.put(poll.getId(), poll);
+        for (VoteOption option : poll.getOptions()) {
+            if (option.getOptionId() == null) {
+                option.setOptionId(voteOptionIdCounter.incrementAndGet()); // Generate a new unique VoteOption ID
+            }
+        }
+        polls.put(poll.getPollId(), poll);
     }
 
     public void deleteUser(Long id) {
+        User user = users.get(id);
+        for (Vote vote : user.getVotes()) {
+            user.getVotes().remove(vote);
+        }
         users.remove(id);
     }
 
@@ -70,14 +85,14 @@ public class PollManager {
 
     public VoteOption findVoteOptionById(Poll poll, Long optionId) {
         return poll.getOptions().stream()
-                .filter(option -> option.getId().equals(optionId))
+                .filter(option -> option.getOptionId().equals(optionId))
                 .findFirst()
                 .orElse(null);
     }
 
     public Vote findVoteById(User user, Long voteId) {
         return user.getVotes().stream()
-                .filter(vote -> vote.getId().equals(voteId))
+                .filter(vote -> vote.getVoteId().equals(voteId))
                 .findFirst()
                 .orElse(null);
     }

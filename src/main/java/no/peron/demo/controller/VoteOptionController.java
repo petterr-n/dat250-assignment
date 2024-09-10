@@ -42,7 +42,7 @@ public class VoteOptionController {
         if (pollOptional.isEmpty()) return ResponseEntity.notFound().build();
 
         Poll poll = pollOptional.get();
-        if (poll.getOptions().removeIf(option -> option.getId().equals(voteOptionId))) {
+        if (poll.getOptions().removeIf(option -> option.getOptionId().equals(voteOptionId))) {
             pollManager.savePoll(poll);
             return ResponseEntity.noContent().build();
         }

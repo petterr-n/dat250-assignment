@@ -21,17 +21,30 @@ public class VoteController {
     private PollManager pollManager;
 
     @GetMapping
-    public List<Vote> getVotes(@PathVariable Long id) {
+    public ResponseEntity<List<Vote>> getVotes(@PathVariable Long id) {
         Optional<User> user = pollManager.getUser(id);
-        return user.map(User::getVotes).orElse(new ArrayList<>());
+
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Vote> votes = user.get().getVotes();
+        if (votes.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(votes);
     }
 
     @PostMapping
-    public ResponseEntity<Vote> createVote(@RequestParam Long id, @RequestBody Vote vote) {
+    public ResponseEntity<Vote> createVote(@PathVariable Long id, @RequestBody Vote vote) {
         Optional<User> userOptional = pollManager.getUser(id);
         if(userOptional.isEmpty()) return ResponseEntity.badRequest().build();
 
         User user = userOptional.get();
+
+        vote.setVoteId(pollManager.getNextVoteId());
+
         vote.setPublishedAt(Instant.now());
         user.getVotes().add(vote);
         pollManager.saveUser(user);
@@ -40,16 +53,21 @@ public class VoteController {
     }
 
 
+
     @DeleteMapping("/{voteId}")
     public ResponseEntity<Vote> deleteVote(@PathVariable Long id, @PathVariable Long voteId) {
         Optional<User> userOptional = pollManager.getUser(id);
         if(userOptional.isEmpty()) return ResponseEntity.notFound().build();
 
         User user = userOptional.get();
-        if (user.getVotes().removeIf(vote -> vote.getId().equals(voteId))) {
+        Vote voteToRemove = pollManager.findVoteById(user, voteId);
+
+        if (voteToRemove != null) {
+            user.getVotes().remove(voteToRemove);
             pollManager.saveUser(user);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         }
+
         return ResponseEntity.notFound().build();
     }
 }
