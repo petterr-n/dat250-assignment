@@ -20,5 +20,7 @@ There are some issues with the current implementation, leading to the test autom
 
 I will try to finish the implementation on time, but if I don't I will create a new branch with the finished iteration.
 
-UPDATE: The necessary implementation of the backend is finished with the correct ID generation, and a test scenario for the api has been made and can be found in the src/test directory. This was finished after the deadline, and can therefore be found in the A2 branch.
+--------------------------------------
+
+UPDATE: Finished the ID generation, and setup a test scenario for the API that is automatically ran everytime a new version of the code is pushed to github. These changes were completed after the deadline, therefore the report above that was written before the deadline will remain unchanged about the problems i had when i first wrote it. 
 
