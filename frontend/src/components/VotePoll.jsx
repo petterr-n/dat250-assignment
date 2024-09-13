@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CheckboxList from "./VoteOptions";
+import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
 
 const style = {
     position: 'absolute',
@@ -41,7 +42,15 @@ export default function BasicModal() {
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     There will be some vote options here.
-                        <CheckboxList/>
+                        <RadioGroup
+                            aria-labelledby="demo-radio-buttons-group-label"
+                            defaultValue="None"
+                            name="radio-buttons-group"
+                        >
+                            <FormControlLabel value="Option 1" control={<Radio />} label="Option 1" />
+                            <FormControlLabel value="Option 2" control={<Radio />} label="Option 2" />
+                            <FormControlLabel value="Option 3" control={<Radio />} label="Option 3" />
+                        </RadioGroup>
                     </Typography>
                 </Box>
             </Modal>
