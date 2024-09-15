@@ -12,6 +12,7 @@ public class VoteOption {
 
     private String caption;
     private int presentationOrder;
+    private int votes = 0;
 
     @ManyToOne
     @JoinColumn(name = "poll_id")
@@ -21,12 +22,28 @@ public class VoteOption {
     public VoteOption() {
     }
 
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
+    public void incrementVotes() {
+        this.votes++;
+    }
+
+    public void decrementVotes() {
+        this.votes--;
+    }
+
     public Long getOptionId() {
         return optionId;
     }
 
-    public void setOptionId(Long id) {
-        this.optionId = id;
+    public void setOptionId(Long optionId) {
+        this.optionId = optionId;
     }
 
     public String getCaption() {
@@ -51,5 +68,15 @@ public class VoteOption {
 
     public void setPoll(Poll poll) {
         this.poll = poll;
+    }
+
+    @Override
+    public String toString() {
+        return "VoteOption{" +
+                "optionId=" + optionId +
+                ", caption='" + caption + '\'' +
+                ", presentationOrder=" + presentationOrder +
+                ", votes=" + votes +
+                '}';
     }
 }

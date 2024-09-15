@@ -5,13 +5,16 @@ import no.peron.demo.model.Poll;
 import no.peron.demo.model.User;
 import no.peron.demo.model.VoteOption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/polls")
 public class PollController {
@@ -25,9 +28,15 @@ public class PollController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Poll> getPoll(@PathVariable Long id) {
-        Optional<Poll> poll = pollManager.getPoll(id);
-        return poll.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Poll> getPoll(@PathVariable String id) {
+        try {
+            Long pollId = Long.parseLong(id); // Convert id from String to Long
+            Optional<Poll> poll = pollManager.getPoll(pollId);
+            return poll.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (NumberFormatException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Poll ID", e);
+        }
     }
 
     @PostMapping
@@ -38,8 +47,10 @@ public class PollController {
             option.setPoll(poll);
         }
 
-        User creator = poll.getCreator();
-        creator.getCreatedPolls().add(poll);
+        if (poll.getCreator() != null) {
+            User creator = poll.getCreator();
+            creator.getCreatedPolls().add(poll);
+        }
 
         pollManager.savePoll(poll);
         return ResponseEntity.ok(poll);

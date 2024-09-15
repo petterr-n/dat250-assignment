@@ -1,3 +1,3 @@
 ### REPORT ###
 ## SPA implementation ##
-Jepp.
+The frontend is built using the Reactjs framework. 

@@ -1,5 +1,6 @@
 package no.peron.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -21,6 +22,11 @@ public class Vote {
     @JoinColumn(name = "option_id")
     private VoteOption option;
 
+    @ManyToOne
+    @JoinColumn(name = "poll_id")
+    @JsonBackReference
+    private Poll poll;
+
     public Vote() {
     }
 
@@ -28,8 +34,8 @@ public class Vote {
         return voteId;
     }
 
-    public void setVoteId(Long id) {
-        this.voteId = id;
+    public void setVoteId(Long voteId) {
+        this.voteId = voteId;
     }
 
     public Instant getPublishedAt() {
@@ -54,5 +60,13 @@ public class Vote {
 
     public void setOption(VoteOption option) {
         this.option = option;
+    }
+
+    public Poll getPoll() {
+        return poll;
+    }
+
+    public void setPoll(Poll poll) {
+        this.poll = poll;
     }
 }

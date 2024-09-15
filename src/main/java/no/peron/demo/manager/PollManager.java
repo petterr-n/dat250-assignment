@@ -65,14 +65,27 @@ public class PollManager {
 
     public void deleteUser(Long id) {
         User user = users.get(id);
-        for (Vote vote : user.getVotes()) {
-            user.getVotes().remove(vote);
+        if (user != null) {
+            // Remove user's votes and update option vote counts
+            user.getVotes().forEach(vote -> {
+                VoteOption option = vote.getOption();
+                if (option != null) {
+                    option.decrementVotes();
+                }
+            });
+            users.remove(id);
         }
-        users.remove(id);
     }
 
     public void deletePoll(Long id) {
-        polls.remove(id);
+        Poll poll = polls.get(id);
+        if (poll != null) {
+            // Remove associated VoteOptions
+            poll.getOptions().forEach(option -> {
+                option.setPoll(null); // Clear the poll reference
+            });
+            polls.remove(id);
+        }
     }
 
     public boolean userExist(Long id) {
@@ -90,10 +103,26 @@ public class PollManager {
                 .orElse(null);
     }
 
-    public Vote findVoteById(User user, Long voteId) {
-        return user.getVotes().stream()
+    public Vote findVoteById(Poll poll, Long voteId) {
+        return poll.getVotes().stream()
                 .filter(vote -> vote.getVoteId().equals(voteId))
                 .findFirst()
                 .orElse(null);
     }
+
+    public VoteOption getVoteOption(Long pollId, Long optionId) {
+        Poll poll = polls.get(pollId);
+        if (poll != null) {
+            return findVoteOptionById(poll, optionId);
+        }
+        return null;
+    }
+
+//    public void saveVote(Vote vote) {
+//        // Implement logic to save the vote if you use a persistence layer.
+//    }
+//
+//    public void saveVoteOption(VoteOption voteOption) {
+//        // Implement logic to save the vote option if you use a persistence layer.
+//    }
 }

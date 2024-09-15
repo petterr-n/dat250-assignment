@@ -46,14 +46,16 @@ export default function ButtonAppBar() {
                         onClose={handleClose}
                         TransitionComponent={Fade}
                     >
-                        <MenuItem onClick={handleClose}>Create User</MenuItem>
+                        <MenuItem onClick={handleClick}>
+                            Create User
+                        </MenuItem>
                         <MenuItem onClick={handleClose}>Create Poll</MenuItem>
                         <MenuItem onClick={handleClose}>View Polls</MenuItem>
                     </Menu>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Poll Application
                     </Typography>
-                    <Button color="inherit">
+                    <Button id="id-signup" color="inherit">
                         <SignUp/>
                     </Button>
                 </Toolbar>

@@ -1,10 +1,8 @@
 package no.peron.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import no.peron.demo.model.VoteOption;
-import no.peron.demo.model.User;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +26,10 @@ public class Poll {
     @JsonManagedReference
     private List<VoteOption> options = new ArrayList<>();
 
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<Vote> votes = new ArrayList<>();
+
     public Poll() {
     }
 
@@ -35,8 +37,8 @@ public class Poll {
         return pollId;
     }
 
-    public void setPollId(Long id) {
-        this.pollId = id;
+    public void setPollId(Long pollId) {
+        this.pollId = pollId;
     }
 
     public String getQuestion() {
@@ -77,5 +79,34 @@ public class Poll {
 
     public void setOptions(List<VoteOption> options) {
         this.options = options;
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
+
+    // Convenience methods for managing options and votes
+    public void addVoteOption(VoteOption option) {
+        options.add(option);
+        option.setPoll(this);
+    }
+
+    public void removeVoteOption(VoteOption option) {
+        options.remove(option);
+        option.setPoll(null);
+    }
+
+    public void addVote(Vote vote) {
+        votes.add(vote);
+        vote.setPoll(this);
+    }
+
+    public void removeVote(Vote vote) {
+        votes.remove(vote);
+        vote.setPoll(null);
     }
 }

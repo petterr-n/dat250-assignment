@@ -44,8 +44,29 @@ export default function InputWithIcon() {
 
     // Handle form submission
     const handleSubmit = () => {
-        // Implement form submit logic here (e.g., send data to the server or process it)
-        console.log({ question, options });
+        const pollData = {
+            question: question,
+            options: options.map((option, index) => ({
+                caption: option,
+                presentationOrder: index + 1,
+                votes: 0
+            }))
+        };
+
+        fetch('http://localhost:8080/polls', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pollData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     };
 
     return (
@@ -55,7 +76,7 @@ export default function InputWithIcon() {
                     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                         <HelpOutline sx={{ color: 'action.active', mr: 1, my: 0.5 }} />                        <TextField
                             id="input-question"
-                            label="Question"
+                            label="Poll Question"
                             variant="standard"
                             multiline
                             fullWidth
@@ -72,6 +93,7 @@ export default function InputWithIcon() {
                         {options.map((option, index) => (
                             <ListItem key={index} sx={{ display: 'flex', alignItems: 'center' }}>
                                 <TextField
+                                    id={`id-option ${index + 1}`}
                                     fullWidth
                                     label={`Option ${index + 1}`}
                                     variant="outlined"
@@ -96,12 +118,12 @@ export default function InputWithIcon() {
 
                 <Box sx={{ marginTop: 3 }}>
                     <Button
-                        id="create-poll-id"
+                        id="id-create-poll"
                         variant="contained"
                         onClick={handleSubmit}
                         disabled={!question.trim() || options.length === 0 || options.some(option => !option.trim())}  // Disable button if question or options are empty
                     >
-                        Create Form
+                        Create Poll
                     </Button>
                 </Box>
 
